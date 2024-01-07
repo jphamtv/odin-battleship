@@ -1,6 +1,9 @@
 // ship.js
 
-export const ship = (length) => {
+let shipIdCounter = 0;
+
+export const createShip = (length) => {
+  const id = shipIdCounter++;
   let hitCount = 0;
   let sunk = false;
 
@@ -15,5 +18,5 @@ export const ship = (length) => {
 
   const isSunk = () => sunk;
 
-  return { length, hit, isSunk };
+  return { id, length, hit, isSunk };
 };
