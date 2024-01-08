@@ -5,7 +5,10 @@ export const createGameBoard = () => {
   // Initialize the game board
   const boardSize = 10;
   const board = initializeBoard(boardSize);
+  const ships = [];
   const shipPositions = {};
+  const missedShots = [];
+  let allShipsAreSunk = false;
 
   // Helper function to initialize the board
   function initializeBoard(size) {
@@ -30,8 +33,10 @@ export const createGameBoard = () => {
   }
   
   // Place the ship on the board with starting coordinate
-  const placeShip = (ship, [x, y], orientation) => {
-    for (let i = 0; i < ship.length; i++) {
+  const placeShip = (length, [x, y], orientation) => {
+    const newShip = createShip(length);
+
+    for (let i = 0; i < length; i++) {
       // Calculate the coordinate based on orientation
       const coordX = orientation === 'horizontal' ? x + i : x;
       const coordY = orientation === 'vertical' ? y + i : y;
@@ -42,10 +47,12 @@ export const createGameBoard = () => {
       }
 
       // Place the ship
-      board[coordX][coordY] = ship.id;   
+      board[coordX][coordY] = newShip.id;   
     }
 
-    shipPositions[ship.id] = { x, y, orientation };
+    ships.push(newShip);
+    shipPositions[newShip.id] = { x, y, orientation };
+    return newShip;
   };
 
   // Get the ship's position on the board
@@ -56,23 +63,30 @@ export const createGameBoard = () => {
     }
     return null;
   };
-  
-  return { board, placeShip, getShipPosition };
-};
-
-
-
-  let missedShots = [];
-  let allSunk = false;
 
   const receiveAttack = ([x, y]) => {
-    if (board[x][y] === 's') {
-      board[x][y] = 'hit';      
+    const cell = board[x][y];
+    const ship = ships.find(ship => ship.id === cell)
+
+    if (cell !== null) {
+      board[x][y] = 'hit'; 
+      ship.hit();
+      return true;
     } else {
-      missedShots.push(x, y);
+      board[x][y] = 'miss';
+      missedShots.push([x, y]);
+      return false;
     }
   };
 
   const allShipsSunk = () => {
-    
-  };
+    return ships.every(ship => ship.isSunk());
+  }; 
+  
+  
+  return { board, missedShots, placeShip, getShipPosition, receiveAttack, allShipsSunk };
+};
+
+
+
+
