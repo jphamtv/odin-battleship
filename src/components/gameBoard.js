@@ -1,5 +1,5 @@
 // gameBoard.js
-import { createShip } from "./ship";
+import { createShip } from "./ship.js";
 
 export const createGameBoard = () => {
   // Initialize the game board
@@ -55,6 +55,11 @@ export const createGameBoard = () => {
     return newShip;
   };
 
+  // Helper function to set a one cell boundary around placed ships
+  function setShipBoundary(ship) {
+    console.log(ship)
+  }
+
   // Get the ship's position on the board
   const getShipPosition = (ship) => {
     const shipInfo = shipPositions[ship.id];
@@ -86,7 +91,3 @@ export const createGameBoard = () => {
   
   return { board, missedShots, placeShip, getShipPosition, receiveAttack, allShipsSunk };
 };
-
-
-
-

@@ -1,3 +1,4 @@
 // index.js
-import { ship } from "./components/ship";
+import { createShip } from "./components/ship.js";
+import { createGameBoard } from "./components/gameBoard.js";
 

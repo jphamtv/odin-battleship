@@ -1,5 +1,5 @@
 // ship.test.js
-import { createShip } from "../src/components/ship";
+import { createShip } from "../src/components/ship.js";
 
 test('creates ship with correct id', () => {
   const testShip = createShip(3);
