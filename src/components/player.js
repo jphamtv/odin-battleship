@@ -1,30 +1,41 @@
 // player.js
 
-import { createGameBoard } from "./gameBoard.js";
-
 export const createPlayer = () => {
 
   // Attack functionality
   const attack = (opponentGameBoard, [x, y]) => {
     return opponentGameBoard.receiveAttack([x, y]);
   };
-
-  // Turn management
   
   return { attack }
 };
 
-
 // Computer random attack function
-export function generateRandomAttack() {
-  const legalMoves = [];
+export function generateRandomAttack(legalMoves) {
+  const numOfCoords = legalMoves.size;
 
-  // Generate legalMoves array objects
+  // Generate random index value based on size of the set
+  const randomIndex = Math.floor(Math.random() * numOfCoords);
 
-  // Generate random number to select coordinate
+  // Convert set to an array
+  const legalMovesArray = Array.from(legalMoves)
+  const randomAttackCoordinate = legalMovesArray[randomIndex];
 
-  // Check to make sure coordinate has not been used
+  legalMoves.delete(randomAttackCoordinate);
 
-  return [x, y];
+  return randomAttackCoordinate;
+}
+
+export function generateCoordinates() {
+  const coordinates = new Set();
+
+  // Generate all possible coordinates
+  for (let x = 0; x < 10; x++) {
+    for (let y = 0; y < 10; y++) {
+      coordinates.add([x, y]);
+    }
+  }  
+
+  return coordinates;
 }
 
