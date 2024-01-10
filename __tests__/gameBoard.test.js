@@ -57,3 +57,5 @@ test('returns false if not all ships are sunk', () => {
   gameBoard.receiveAttack([3, 5]);
   expect(gameBoard.allShipsSunk()).toBe(false);
 }); 
+
+  

@@ -6,9 +6,9 @@ export const createGameBoard = () => {
   const boardSize = 10;
   const board = initializeBoard(boardSize);
   const ships = [];
-  const shipPositions = {};
+  const shipPositions = {}; // **DELETE THIS IF NOT NECESSARY**
   const missedShots = [];
-  let allShipsAreSunk = false;
+  let allShipsAreSunk = false; // **DELETE THIS - NOT NEEDED**
 
   // Helper function to initialize the board
   function initializeBoard(size) {
@@ -32,22 +32,46 @@ export const createGameBoard = () => {
     return board[x][y] !== null;
   }
   
+  // Helper function to check for boundary violation
+  function isBoundaryViolation(x, y) {
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        if (!isOutOfBounds(x + i, y + j) 
+            && board[x + i][y + j] === 'boundary') {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   // Place the ship on the board with starting coordinate
   const placeShip = (length, [x, y], orientation) => {
     const newShip = createShip(length);
 
+    // First, check if out of bounds, collision, or boundary violations
     for (let i = 0; i < length; i++) {
       // Calculate the coordinate based on orientation
       const coordX = orientation === 'horizontal' ? x + i : x;
       const coordY = orientation === 'vertical' ? y + i : y;
 
       // Check for boundaries and collisions
-      if (isOutOfBounds(coordX, coordY) || isCollision(coordX, coordY)) {
+      if (isOutOfBounds(coordX, coordY) 
+          || isCollision(coordX, coordY) 
+          || isBoundaryViolation(coordX, coordY)) {
         throw new Error('Invalid ship placement');
       }
+    }
+
+    // Then place the ship and set boundaries
+    for (let i = 0; i < length; i++) {
+      // Calculate the coordinate based on orientation
+      const coordX = orientation === 'horizontal' ? x + i : x;
+      const coordY = orientation === 'vertical' ? y + i : y;
 
       // Place the ship
-      board[coordX][coordY] = newShip.id;   
+      board[coordX][coordY] = newShip.id;
+      setShipBoundary(coordX, coordY);   
     }
 
     ships.push(newShip);
@@ -56,11 +80,17 @@ export const createGameBoard = () => {
   };
 
   // Helper function to set a one cell boundary around placed ships
-  function setShipBoundary(ship) {
-    console.log(ship)
+  function setShipBoundary(x, y) {
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        if (!isOutOfBounds(x + i, y + j) && board[x + i][y + j] === null) {
+          board[x + i][y + j] = 'boundary';
+        }
+      }
+    }
   }
 
-  // Get the ship's position on the board
+  // **DELETE THIS IF NOT NEEDED** Get the ship's position on the board
   const getShipPosition = (ship) => {
     const shipInfo = shipPositions[ship.id];
     if (shipInfo) {
@@ -73,7 +103,7 @@ export const createGameBoard = () => {
     const cell = board[x][y];
     const ship = ships.find(ship => ship.id === cell)
 
-    if (cell !== null) {
+    if (cell !== null && cell !== 'boundary') {
       board[x][y] = 'hit'; 
       ship.hit();
       return true;
@@ -89,5 +119,12 @@ export const createGameBoard = () => {
   }; 
   
   
-  return { board, missedShots, placeShip, getShipPosition, receiveAttack, allShipsSunk };
+  return { 
+    board, 
+    missedShots, 
+    placeShip, 
+    getShipPosition, 
+    receiveAttack, 
+    allShipsSunk 
+  };
 };
