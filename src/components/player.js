@@ -3,8 +3,8 @@
 export const createPlayer = (name) => {
 
   // Attack functionality
-  const attack = (opponentGameBoard, [x, y]) => {
-    return opponentGameBoard.receiveAttack([x, y]);
+  const attack = (opponentGameBoard, [row, col]) => {
+    return opponentGameBoard.receiveAttack([row, col]);
   };
   
   return { attack };
@@ -31,9 +31,9 @@ export const generateCoordinates = () => {
   const legalMoves = new Set();
 
   // Generate all possible coordinates
-  for (let x = 0; x < 10; x++) {
-    for (let y = 0; y < 10; y++) {
-      legalMoves.add([x, y]);
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      legalMoves.add([row, col]);
     }
   }  
 

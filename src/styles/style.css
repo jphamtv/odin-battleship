@@ -1,0 +1,20 @@
+/* style.css */
+
+
+.game-boards-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+table {
+  width: 350px;
+  height: 350px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid black;
+}

@@ -41,7 +41,7 @@ test('game board correctly keeps track of missed shots', () => {
 // Test if the game board correctly reports when all ships are sunk
 test('returns true if all ships are sunk', () => {
   const gameBoard = createGameBoard();
-  gameBoard.placeShip(3, [3, 4], 'horizontal');  
+  gameBoard.placeShip(3, [3, 4], 'vertical');  
   gameBoard.receiveAttack([3, 4]);
   gameBoard.receiveAttack([4, 4]);
   gameBoard.receiveAttack([5, 4]);

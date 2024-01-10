@@ -11,7 +11,7 @@ test('switches players turn after a turn', () => {
   let currentAttacker = playerOne;
 
   playerOne.attack(playerTwoGameBoard, [1, 1]);
-  currentAttacker = switchPlayersTurn(currentAttacker);
+  currentAttacker = switchPlayersTurn(currentAttacker, playerOne, playerTwo);
 
   expect(currentAttacker.name).toBe(playerTwo.name);
 });
@@ -27,7 +27,7 @@ test('remains current players turn after successful hit', () => {
   currentAttacker = switchPlayersTurn(currentAttacker);
 
   playerTwo.attack(playerOneGameBoard, [2, 2]);
-  currentAttacker = switchPlayersTurn(currentAttacker);
+  currentAttacker = switchPlayersTurn(currentAttacker, playerOne, playerTwo);
 
   expect(currentAttacker.name).toBe(playerOne.name);
 });
