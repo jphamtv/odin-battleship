@@ -33,16 +33,31 @@ export const createGameBoard = () => {
   }
   
   // Helper function to check for boundary violation
-  function isBoundaryViolation(x, y) {
-    for (let i = -1; i <= 1; i++) {
-      for (let j = -1; j <= 1; j++) {
-        if (!isOutOfBounds(x + i, y + j) 
-            && board[x + i][y + j] === 'boundary') {
-          return true;
+  function isValidPlacement(x, y, length, orientation) {
+    for (let i = 0; i < length; i++) {
+      const coordX = orientation === 'vertical' ? x + i : x;
+      const coordY = orientation === 'horizontal' ? y + i : y;
+
+      if (isOutOfBounds(coordX, coordY) || isCollision(coordX, coordY)) {
+        return false;
+      }
+
+      // Check the ship cells and all surrounding cells
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          // Skip diagonal cells and the ship cell itself
+          if(Math.abs(dx) === Math.abs(dy)) continue;
+
+          const checkX = coordX + dx;
+          const checkY = coordY + dy;
+
+          if (!isOutOfBounds(checkX, checkY) && board[checkX][checkY] !== null && board[checkX][checkY] !== 'boundary') {
+            return false;
+          }
         }
       }
     }
-    return false;
+    return true;
   }
 
   // Place the ship on the board with starting coordinate
@@ -52,13 +67,11 @@ export const createGameBoard = () => {
     // First, check if out of bounds, collision, or boundary violations
     for (let i = 0; i < length; i++) {
       // Calculate the coordinate based on orientation
-      const coordX = orientation === 'horizontal' ? x + i : x;
-      const coordY = orientation === 'vertical' ? y + i : y;
+      const coordX = orientation === 'vertical' ? x + i : x;
+      const coordY = orientation === 'horizontal' ? y + i : y;
 
       // Check for boundaries and collisions
-      if (isOutOfBounds(coordX, coordY) 
-          || isCollision(coordX, coordY) 
-          || isBoundaryViolation(coordX, coordY)) {
+      if (!isValidPlacement(x, y, length, orientation)) {
         throw new Error('Invalid ship placement');
       }
     }
@@ -66,8 +79,8 @@ export const createGameBoard = () => {
     // Then place the ship and set boundaries
     for (let i = 0; i < length; i++) {
       // Calculate the coordinate based on orientation
-      const coordX = orientation === 'horizontal' ? x + i : x;
-      const coordY = orientation === 'vertical' ? y + i : y;
+      const coordX = orientation === 'vertical' ? x + i : x;
+      const coordY = orientation === 'horizontal' ? y + i : y;
 
       // Place the ship
       board[coordX][coordY] = newShip.id;

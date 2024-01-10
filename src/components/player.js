@@ -11,7 +11,7 @@ export const createPlayer = (name) => {
 };
 
 // Function to generate random attacks for the computer AI
-export function generateRandomAttack(legalMoves) {
+export const generateRandomAttack = (legalMoves) => {
   const numOfCoords = legalMoves.size;
 
   // Generate random index value based on size of the set
@@ -24,10 +24,10 @@ export function generateRandomAttack(legalMoves) {
   legalMoves.delete(randomAttackCoordinate);
 
   return randomAttackCoordinate;
-}
+};
 
 // Helper function to generate all the possible legal moves
-export function generateCoordinates() {
+export const generateCoordinates = () => {
   const legalMoves = new Set();
 
   // Generate all possible coordinates
@@ -38,5 +38,5 @@ export function generateCoordinates() {
   }  
 
   return legalMoves;
-}
+};
 
