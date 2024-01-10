@@ -1,13 +1,13 @@
 // player.js
 
-export const createPlayer = () => {
+export const createPlayer = (name) => {
 
   // Attack functionality
   const attack = (opponentGameBoard, [x, y]) => {
     return opponentGameBoard.receiveAttack([x, y]);
   };
   
-  return { attack }
+  return { attack };
 };
 
 // Function to generate random attacks for the computer AI
