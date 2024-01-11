@@ -1,5 +1,25 @@
 /* style.css */
 
+/* INSTRUCTIONS CONTAINER STYLES */
+
+.instruction-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.instruction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  width: 20rem;
+  background-color: rgb(244, 244, 244);
+}
+
+
+/* GAME BOARD CONTAINER STYLES */
 
 .game-boards-container {
   display: flex;

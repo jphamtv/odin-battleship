@@ -2,7 +2,7 @@
 
 
 
-export const renderGameBoards = (playerOneGameBoard, playerTwoGameBoard) => {
+export const renderGameBoards = (playerOneGameBoard, playerTwoGameBoard, playerOne, playerTwo) => {
   const playerBoard = document.querySelector('#player-board-placeholder');
   playerBoard.appendChild(createGameBoardUI());
   renderShipsOnGameBoardUI(playerBoard, playerOneGameBoard);
@@ -34,19 +34,24 @@ const createGameBoardUI = () => {
 
 export const renderShipsOnGameBoardUI = (boardPlaceholder, playerBoard) => {
   const container = boardPlaceholder;
-  
+
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 10; col++) {
       const boardCell = container.querySelector(`table tr td[data-row="${row}"][data-col="${col}"]`);
-      
       if (playerBoard.board[row][col] === null || playerBoard.board[row][col] === 'boundary') {
         boardCell.classList.add('cell-empty');
-      } else {
+      } else if (typeof playerBoard.board[row][col] === 'number') {
         boardCell.classList.add('cell-ship');
+      } else if (playerBoard.board[row][col] === 'hit') {
+        boardCell.classList.add('cell-hit');
+      } else if (playerBoard.board[row][col] === 'miss') {
+        boardCell.classList.add('cell-miss');
       }
     }
-  }
+  }  
 };
+
+
 
 const handleCellClick = (row, col) => {
   // Logic for handling a cell click, e.g., making a move in a game

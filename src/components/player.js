@@ -1,42 +1,43 @@
 // player.js
 
-export const createPlayer = (name) => {
+export const createPlayer = (name, isHuman) => {
+  // Store coordinates to keep track of possible AI moves
+  const possibleMoves = isHuman ? null : generateSetOfCoords();
 
-  // Attack functionality
-  const attack = (opponentGameBoard, [row, col]) => {
-    return opponentGameBoard.receiveAttack([row, col]);
+  const attack = (opponentGameBoard, chosenMove = null) => {
+    let move = chosenMove;
+
+    if (!isHuman) {
+      move = generateRandomCoord(possibleMoves);
+      possibleMoves.delete(move);
+    }
+
+    return opponentGameBoard.receiveAttack(move);
   };
-  
-  return { attack };
+
+  return { name, isHuman, possibleMoves, attack };
 };
 
 // Function to generate random attacks for the computer AI
-export const generateRandomAttack = (legalMoves) => {
-  const numOfCoords = legalMoves.size;
+export const generateRandomCoord = (possibleMoves) => {
+  // Convert the set to an array to pick by index
+  const array = Array.from(possibleMoves)
 
-  // Generate random index value based on size of the set
-  const randomIndex = Math.floor(Math.random() * numOfCoords);
+  const index = Math.floor(Math.random() * array.length);
+  const move = array[index];
 
-  // Convert set to an array
-  const legalMovesArray = Array.from(legalMoves)
-  const randomAttackCoordinate = legalMovesArray[randomIndex];
-
-  legalMoves.delete(randomAttackCoordinate);
-
-  return randomAttackCoordinate;
+  return move;
 };
 
-// Helper function to generate all the possible legal moves
-export const generateCoordinates = () => {
-  const legalMoves = new Set();
+// Helper function to generate all the possible coords on the board
+export const generateSetOfCoords = () => {
+  const coordinates = new Set();
 
-  // Generate all possible coordinates
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 10; col++) {
-      legalMoves.add([row, col]);
+      coordinates.add([row, col]);
     }
   }  
 
-  return legalMoves;
+  return coordinates;
 };
-
