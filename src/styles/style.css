@@ -18,3 +18,7 @@ table {
 td {
   border: 1px solid black;
 }
+
+.cell-ship {
+  background-color: lightblue;
+}

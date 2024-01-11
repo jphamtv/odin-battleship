@@ -1,6 +1,7 @@
 // gameLoop.js
 import { createPlayer, generateCoordinates, generateRandomAttack } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
+import { renderGameBoards } from "./domController.js";
 
 // Initialize new game
 export const initializeGame = () => {
@@ -8,10 +9,13 @@ export const initializeGame = () => {
   const playerTwo = createPlayer('Player Two');
   const playerOneGameBoard = createGameBoard();
   const playerTwoGameBoard = createGameBoard();
-
+  
   // Place ships on board
-  placeShipsOnBoard(playerOneGameBoard);
-  placeShipsOnBoard(playerTwoGameBoard);
+  placeShipsOnBoard(playerOneGameBoard, playerTwoGameBoard);
+  renderGameBoards(playerOneGameBoard, playerTwoGameBoard);
+
+  // **LATER ON PLACE SHIP SEPARATELY FOR EACH PLAYER**
+  // placeShipsOnBoard(playerTwoGameBoard);
 
   return { playerOne, playerTwo, playerOneGameBoard, playerTwoGameBoard };
 };
