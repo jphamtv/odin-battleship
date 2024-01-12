@@ -1,64 +1,58 @@
 // gameLoop.js
 import { createPlayer } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
-import { renderGameBoards } from "./domController.js";
+import { renderBattleFields } from "./domController.js";
 
 // Initialize new game
 export const initializeGame = () => {
-  const playerOne = createPlayer('Player One', true);
-  const playerTwo = createPlayer('Player Two', false);
-  const playerOneGameBoard = createGameBoard();
-  const playerTwoGameBoard = createGameBoard();
+  const player = createPlayer('Player', true);
+  const computer = createPlayer('Computer', false);
+  const playerBattleField = createGameBoard();
+  const computerBattleField = createGameBoard();
   
-  // Place ships on board
-  placeShipsOnBoard(playerOneGameBoard, playerTwoGameBoard);
-  renderGameBoards(playerOneGameBoard, playerTwoGameBoard, playerOne, playerTwo);
+  // Place ships on board **LATER ON PLACE SHIP SEPARATELY FOR EACH PLAYER**
+  placeShipsOnBattleField(playerBattleField, computerBattleField);
+  renderBattleFields(playerBattleField, computerBattleField, player, computer);
 
-  // **LATER ON PLACE SHIP SEPARATELY FOR EACH PLAYER**
-  // placeShipsOnBoard(playerTwoGameBoard);
-
-  return { playerOne, playerTwo, playerOneGameBoard, playerTwoGameBoard };
+  return { player, computer, playerBattleField, computerBattleField };
 };
 
 // Place ships on player's boards **WILL AUTOMATE THIS LATER and DRAG N DROP LATER**
-const placeShipsOnBoard = (playerOneGameBoard, playerTwoGameBoard) => {
-  const carrier = 5;
-  const battleship = 4;
-  const destroyer = 3;
-  const submarine = 3;
-  const patrolBoat = 2;
+const placeShipsOnBattleField = (playerBattleField, computerBattleField) => {
+  playerBattleField.placeShip(5, [1, 5], 'horizontal');
+  playerBattleField.placeShip(4, [0, 2], 'vertical');
+  playerBattleField.placeShip(3, [4, 5], 'horizontal');
+  playerBattleField.placeShip(3, [7, 4], 'horizontal');
+  playerBattleField.placeShip(2, [9, 0], 'horizontal');
 
-  playerOneGameBoard.placeShip(carrier, [1, 5], 'horizontal');
-  playerOneGameBoard.placeShip(battleship, [0, 2], 'vertical');
-  playerOneGameBoard.placeShip(destroyer, [4, 5], 'horizontal');
-  playerOneGameBoard.placeShip(submarine, [7, 4], 'horizontal');
-  playerOneGameBoard.placeShip(patrolBoat, [9, 0], 'horizontal');
-
-  playerTwoGameBoard.placeShip(carrier, [6, 4], 'horizontal');
-  playerTwoGameBoard.placeShip(battleship, [4, 6], 'horizontal');
-  playerTwoGameBoard.placeShip(destroyer, [2, 0], 'vertical');
-  playerTwoGameBoard.placeShip(submarine, [0, 8], 'vertical');
-  playerTwoGameBoard.placeShip(patrolBoat, [9, 7], 'horizontal');
+  computerBattleField.placeShip(5, [6, 4], 'horizontal');
+  computerBattleField.placeShip(4, [4, 6], 'horizontal');
+  computerBattleField.placeShip(3, [2, 0], 'vertical');
+  computerBattleField.placeShip(3, [0, 8], 'vertical');
+  computerBattleField.placeShip(2, [9, 7], 'horizontal');
 };
 
 export const startGame = () => {
-  const { playerOne, playerTwo, playerOneGameBoard, playerTwoGameBoard } = initializeGame();
-  let currentAttacker = playerOne;
+  const { player, computer, playerBattleField, computerBattleField } = initializeGame();
+  let currentPlayer = player;
 
-  currentAttacker = switchPlayersTurn(currentAttacker, playerOne, playerTwo);
-};
-
-export const switchPlayersTurn = (currentAttacker, playerOne, playerTwo) => {
-  return currentAttacker === playerOne ? playerTwo : playerOne;
-};
-
-const checkForWinner = (playerOneGameBoard, playerTwoGameBoard) => {
-  if (playerOneGameBoard.allShipsSunk === true) {
-    return alert('Player Two wins!')
+  if (miss) {
+    currentPlayer = switchPlayer(currentPlayer, player, computer);    
   }
 
-  if (playerTwoGameBoard.allShipsSunk === true) {
-    return alert('Player One wins!')
+};
+
+export const switchPlayer = (currentPlayer, player, computer) => {
+  return currentPlayer === player ? computer : player;
+};
+
+const checkForWinner = (playerBattleField, computerBattleField) => {
+  if (playerBattleField.allShipsSunk === true) {
+    return alert('Computer wins!')
+  }
+
+  if (computerBattleField.allShipsSunk === true) {
+    return alert('Player wins!')
   }
 };
 

@@ -28,6 +28,11 @@
   margin-top: 2rem;
 }
 
+.board + div {
+  text-align: center;
+  margin-top: 1rem;
+}
+
 table {
   width: 350px;
   height: 350px;
@@ -40,5 +45,14 @@ td {
 }
 
 .cell-ship {
+  background-color: lightgreen;
+  border: green;
+}
+
+.cell-miss {
   background-color: lightblue;
+}
+
+.cell-hit {
+  background-color: lightcoral;
 }

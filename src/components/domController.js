@@ -1,18 +1,19 @@
 // domController.js
 
 
+export const renderBattleFields = (playerBattleField, computerBattleField, player, computer) => {
+  const playerBoardDiv = document.querySelector('#player-board-placeholder');
+  playerBoardDiv.appendChild(createBattleField());
+  renderShipsOnBattleField(playerBoardDiv, playerBattleField);
 
-export const renderGameBoards = (playerOneGameBoard, playerTwoGameBoard, playerOne, playerTwo) => {
-  const playerBoard = document.querySelector('#player-board-placeholder');
-  playerBoard.appendChild(createGameBoardUI());
-  renderShipsOnGameBoardUI(playerBoard, playerOneGameBoard);
+  const computerBoardDiv = document.querySelector('#computer-board-placeholder');
+  computerBoardDiv.appendChild(createBattleField());  
+  // renderShipsOnBattleField(computerBoardDiv, computerBattleField);
 
-  const computerBoard = document.querySelector('#computer-board-placeholder');
-  computerBoard.appendChild(createGameBoardUI());  
-  renderShipsOnGameBoardUI(computerBoard, playerTwoGameBoard);
+  addEventListenersToBoard(player, computerBoardDiv, computerBattleField);
 };
 
-const createGameBoardUI = () => {
+const createBattleField = () => {
   const table = document.createElement('table');
   table.classList.add('board-table');
   for (let row = 0; row < 10; row++) {
@@ -24,7 +25,6 @@ const createGameBoardUI = () => {
       td.dataset.row = row;
       td.dataset.col = col;
 
-      td.addEventListener('click', () => handleCellClick(row, col));
       tr.appendChild(td);
     } 
     table.appendChild(tr);
@@ -32,28 +32,41 @@ const createGameBoardUI = () => {
   return table;
 };
 
-export const renderShipsOnGameBoardUI = (boardPlaceholder, playerBoard) => {
-  const container = boardPlaceholder;
-
+export const renderShipsOnBattleField = (boardDiv, battleField) => {
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 10; col++) {
-      const boardCell = container.querySelector(`table tr td[data-row="${row}"][data-col="${col}"]`);
-      if (playerBoard.board[row][col] === null || playerBoard.board[row][col] === 'boundary') {
+      const boardCell = boardDiv.querySelector(`table tr td[data-row="${row}"][data-col="${col}"]`);
+      if (battleField.board[row][col] === null || battleField.board[row][col] === 'boundary') {
         boardCell.classList.add('cell-empty');
-      } else if (typeof playerBoard.board[row][col] === 'number') {
+      } else if (typeof battleField.board[row][col] === 'number') {
         boardCell.classList.add('cell-ship');
-      } else if (playerBoard.board[row][col] === 'hit') {
-        boardCell.classList.add('cell-hit');
-      } else if (playerBoard.board[row][col] === 'miss') {
-        boardCell.classList.add('cell-miss');
-      }
+      } 
     }
   }  
 };
 
+const updateBattleField = (row, col, boardCell, battleField) => {
+  console.log(row, col, boardCell, battleField)
+  if (battleField.board[row][col] === 'hit') {
+    boardCell.classList.add('cell-hit');
+  } else if (battleField.board[row][col] === 'miss') {
+    boardCell.classList.add('cell-miss');
+  } 
+}; 
+
+const addEventListenersToBoard = (currentPlayer, gameBoardDiv, opponentBattleField) => {
+  const cells = gameBoardDiv.querySelectorAll('.board-cell');
+  cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+      handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBattleField);
+    });
+  });
+};
 
 
-const handleCellClick = (row, col) => {
-  // Logic for handling a cell click, e.g., making a move in a game
-  console.log(`Cell at row ${row}, col ${col} was clicked`);
+const handleCellClick = (row, col, currentPlayer, opponentBattleField) => {
+  console.log(row, col, currentPlayer, opponentBattleField)
+  const boardCell = document.querySelector(`#computer-board-placeholder table tr td[data-row="${row}"][data-col="${col}"]`);
+  currentPlayer.attack(opponentBattleField, [row, col]);
+  updateBattleField(row, col, boardCell, opponentBattleField);
 };
