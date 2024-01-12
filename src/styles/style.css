@@ -53,6 +53,11 @@ td {
   background-color: lightblue;
 }
 
+.cell-miss-auto {
+  background-color: lightgray;
+}
+
+
 .cell-hit {
   background-color: lightcoral;
 }

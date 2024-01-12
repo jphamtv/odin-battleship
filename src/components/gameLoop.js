@@ -46,17 +46,13 @@ export const switchPlayer = (currentPlayer, player, computer) => {
   return currentPlayer === player ? computer : player;
 };
 
-const checkForWinner = (playerBattleField, computerBattleField) => {
-  if (playerBattleField.allShipsSunk === true) {
-    return alert('Computer wins!')
-  }
-
-  if (computerBattleField.allShipsSunk === true) {
-    return alert('Player wins!')
-  }
+export const checkForWinner = (currentPlayer, opponentBattleField) => {
+  if (opponentBattleField.allShipsSunk() === true) return announceWinner(currentPlayer);
 };
 
-const announceWinner = (winner) => {};
+const announceWinner = (winner) => {
+  return alert(`${winner.name} wins!`);
+};
 
 const resetGame = () => {};
 
