@@ -65,8 +65,8 @@ const addEventListenersToBoard = (currentPlayer, gameBoardDiv, opponentBattleFie
 
 
 const handleCellClick = (row, col, currentPlayer, opponentBattleField) => {
-  console.log(row, col, currentPlayer, opponentBattleField)
   const boardCell = document.querySelector(`#computer-board-placeholder table tr td[data-row="${row}"][data-col="${col}"]`);
   currentPlayer.attack(opponentBattleField, [row, col]);
   updateBattleField(row, col, boardCell, opponentBattleField);
+  console.log(opponentBattleField.allShipsSunk())
 };

@@ -34,11 +34,11 @@ const placeShipsOnBattleField = (playerBattleField, computerBattleField) => {
 
 export const startGame = () => {
   const { player, computer, playerBattleField, computerBattleField } = initializeGame();
+  let gameOver = false;
   let currentPlayer = player;
+   
+  currentPlayer = switchPlayer(currentPlayer, player, computer);    
 
-  if (miss) {
-    currentPlayer = switchPlayer(currentPlayer, player, computer);    
-  }
 
 };
 
