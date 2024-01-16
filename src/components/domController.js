@@ -72,10 +72,11 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   if (opponentBoard.board[row][col] === 'hit') {
     boardCell.classList.add('cell-hit');
     let shipSunk = false;
+    let ship = null;
 
     if (boardCell && boardCell.dataset.id) {
       const shipId = Number(boardCell.dataset.id);
-      const ship = opponentBoard.ships.find(ship => ship.id === shipId);
+      ship = opponentBoard.ships.find(ship => ship.id === shipId);
       console.log(ship)
       shipSunk = ship.isSunk();
     }  
@@ -90,8 +91,8 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
         // Mark surrounding cells for each segment of the ship
         for (let dRow = -1; dRow <= 1; dRow++) {
           for (let dCol = -1; dCol <= 1; dCol++) {
-            const checkRow = row + dRow;
-            const checkCol = col + dCol;
+            const checkRow = currentRow + dRow;
+            const checkCol = currentCol + dCol;
 
             if (!isOutOfBounds(checkRow, checkCol) && opponentBoard.board[checkRow][checkCol] !== 'miss' && opponentBoard.board[checkRow][checkCol] !== 'hit') {
               const cellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);

@@ -2,7 +2,7 @@
 
 let shipIdCounter = 0;
 
-export const createShip = (length) => {
+export const createShip = (length, position, orientation) => {
   const id = shipIdCounter++;
   let hitCount = 0;
   let sunk = false;
@@ -18,5 +18,5 @@ export const createShip = (length) => {
 
   const isSunk = () => sunk;
 
-  return { id, length, hit, isSunk };
+  return { id, length, position, orientation, hit, isSunk };
 };
