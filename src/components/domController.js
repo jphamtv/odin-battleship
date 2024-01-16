@@ -1,19 +1,19 @@
 // domController.js
-import { checkForWinner } from "./gameLoop.js";
+import { onPlayersTurn } from "./gameController.js";
 
-export const renderBattleFields = (playerBattleField, computerBattleField, player, computer) => {
+export const renderBoards = (playerBoard, computerBoard, player, computer) => {
   const playerBoardDiv = document.querySelector('#player-board-placeholder');
-  playerBoardDiv.appendChild(createBattleField());
-  renderShipsOnBattleField(playerBoardDiv, playerBattleField);
+  playerBoardDiv.appendChild(createBoardElements());
+  renderShipsOnBoard(playerBoardDiv, playerBoard);
 
   const computerBoardDiv = document.querySelector('#computer-board-placeholder');
-  computerBoardDiv.appendChild(createBattleField());  
-  // renderShipsOnBattleField(computerBoardDiv, computerBattleField);
+  computerBoardDiv.appendChild(createBoardElements());  
+  renderShipsOnBoard(computerBoardDiv, computerBoard);
 
-  addEventListenersToBoard(player, computerBoardDiv, computerBattleField);
+  addEventListenersToBoardCells(player, computerBoard);
 };
 
-const createBattleField = () => {
+const createBoardElements = () => {
   const table = document.createElement('table');
   table.classList.add('board-table');
   for (let row = 0; row < 10; row++) {
@@ -32,66 +32,90 @@ const createBattleField = () => {
   return table;
 };
 
-export const renderShipsOnBattleField = (boardDiv, battleField) => {
+export const renderShipsOnBoard = (boardDiv, playerBoard) => {
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 10; col++) {
       const boardCell = boardDiv.querySelector(`table tr td[data-row="${row}"][data-col="${col}"]`);
-      if (battleField.board[row][col] === null || battleField.board[row][col] === 'boundary') {
+      if (playerBoard.board[row][col] === null || playerBoard.board[row][col] === 'boundary') {
         boardCell.classList.add('cell-empty');
-      } else if (typeof battleField.board[row][col] === 'number') {
+      } else if (typeof playerBoard.board[row][col] === 'number') {
         boardCell.classList.add('cell-ship');
+        boardCell.dataset.id = playerBoard.board[row][col];
       } 
     }
   }  
 };
 
-const updateBattleField = (row, col, boardCell, battleField) => {
+export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
+  let boardDivId = '';
   row = Number(row);
   col = Number(col);
-
+  
+  
+  if (currentPlayer.isHuman === true) {
+    boardDivId = '#computer-board-placeholder';
+  } else {
+    boardDivId = '#player-board-placeholder';
+  }
+  
+  const boardCell = document.querySelector(`${boardDivId} table tr td[data-row="${row}"][data-col="${col}"]`);
+  
+  
   // Helper function to check for out of bounds
   const isOutOfBounds = (row, col) => {
     return row < 0 || row >= 10 || col < 0 || col >= 10; 
   };
+  
 
-  if (battleField.board[row][col] === 'hit') {
+  // if (hit & not ), if (hit & sunk), else (miss)
+  // DO THIS NEXT
+  if (opponentBoard.board[row][col] === 'hit') {
     boardCell.classList.add('cell-hit');
+    let shipSunk = false;
 
-    // Loop to check the diagonal cells
+    if (boardCell && boardCell.dataset.id) {
+      const shipId = Number(boardCell.dataset.id);
+      const ship = opponentBoard.ships.find(ship => ship.id === shipId);
+      shipSunk = ship.isSunk();
+    }  
+
+    // Loop to check boundary cells
     for (let dRow = -1; dRow <= 1; dRow++) {
       for (let dCol = -1; dCol <= 1; dCol++) {
         
         // Skip non-diagonal cells
-        if(Math.abs(dRow) !== Math.abs(dCol)) continue;
+        if (!shipSunk && Math.abs(dRow) !== Math.abs(dCol)) continue;
 
         const checkRow = row + dRow;
         const checkCol = col + dCol;
         
-        if (!isOutOfBounds(checkRow, checkCol) && battleField.board[checkRow][checkCol] !== 'miss') {
-          const diagonalCellDiv = document.querySelector(`#computer-board-placeholder table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
+        if (!isOutOfBounds(checkRow, checkCol) && opponentBoard.board[checkRow][checkCol] !== 'miss' && opponentBoard.board[checkRow][checkCol] !== 'hit') {
+          const diagonalCellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
           diagonalCellDiv.classList.add('cell-miss-auto');
-          console.log(diagonalCellDiv)
+          diagonalCellDiv.textContent = '•';
         }
       }
     }    
-  } else if (battleField.board[row][col] === 'miss') {
+  } else if (opponentBoard.board[row][col] === 'miss') {
     boardCell.classList.add('cell-miss');
+    boardCell.textContent = '•';
   } 
 }; 
 
-const addEventListenersToBoard = (currentPlayer, gameBoardDiv, opponentBattleField) => {
-  const cells = gameBoardDiv.querySelectorAll('.board-cell');
+export const addEventListenersToBoardCells = (currentPlayer, opponentBoard) => {
+  const computerBoardDiv = document.querySelector('#computer-board-placeholder');
+  const cells = computerBoardDiv.querySelectorAll('.board-cell');
   cells.forEach(cell => {
     cell.addEventListener('click', () => {
-      handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBattleField);
+      handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBoard);
     });
   });
 };
 
-const handleCellClick = (row, col, currentPlayer, opponentBattleField) => {
-  const boardCell = document.querySelector(`#computer-board-placeholder table tr td[data-row="${row}"][data-col="${col}"]`);
-  currentPlayer.attack(opponentBattleField, [row, col]);
-  updateBattleField(row, col, boardCell, opponentBattleField);
-  checkForWinner(currentPlayer, opponentBattleField);
-  console.log(opponentBattleField.allShipsSunk());
+const handleCellClick = (row, col, currentPlayer, opponentBoard) => {
+  currentPlayer.attack(opponentBoard, [row, col]);
+  updateBoardUI(row, col, currentPlayer, opponentBoard);
+
+  onPlayersTurn();
+  
 };

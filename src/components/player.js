@@ -12,7 +12,8 @@ export const createPlayer = (name, isHuman) => {
       possibleMoves.delete(move);
     }
 
-    return opponentGameBoard.receiveAttack(move);
+    const attackResult = opponentGameBoard.receiveAttack(move);
+    return { attackResult, move };
   };
 
   return { name, isHuman, possibleMoves, attack };

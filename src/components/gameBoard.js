@@ -2,26 +2,24 @@
 import { createShip } from "./ship.js";
 
 export const createGameBoard = () => {
-  // Initialize the game board
-  const boardSize = 10;
   
   // Helper function to initialize the board
-  const initializeBoard = (size) => {
+  const initializeBoard = () => {
     const newBoard = [];
-    for (let row = 0; row < size; row++) {
+    for (let row = 0; row < 10; row++) {
       newBoard[row] = [];
-      for (let col = 0; col < size; col++) {
+      for (let col = 0; col < 10; col++) {
         newBoard[row][col] = null;
       }
     }    
     return newBoard;
   };
   
-  const board = initializeBoard(boardSize);
+  const board = initializeBoard();
 
   // Helper function to check for out of bounds
   const isOutOfBounds = (row, col) => {
-    return row < 0 || row >= boardSize || col < 0 || col >= boardSize; 
+    return row < 0 || row >= 10 || col < 0 || col >= 10; 
   };
 
   // Helper function to check for collision
@@ -136,6 +134,8 @@ export const createGameBoard = () => {
   
   return { 
     board, 
+    ships,
+    shipPositions,
     missedShots, 
     placeShip, 
     getShipPosition, 

@@ -1,7 +1,6 @@
 // index.js
-import { initializeGame, startGame } from "./components/gameLoop.js";
-import { renderBattleFields } from "./components/domController.js";
+import { initializeGame } from "./components/gameController.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-  startGame();
+  initializeGame();
 });

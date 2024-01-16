@@ -44,20 +44,27 @@ td {
   border: 1px solid black;
 }
 
+.board-cell {
+  height: 30px;
+  width: 30px;
+  text-align: center;
+}
+
 .cell-ship {
-  background-color: lightgreen;
-  border: green;
+  background-color: lightblue;
+  border: blue;
 }
 
 .cell-miss {
-  background-color: lightblue;
+  background-color: rgb(241, 241, 241);
 }
 
 .cell-miss-auto {
-  background-color: lightgray;
+  background-color: rgb(241, 241, 241);
+  color: rgb(180, 180, 180);
 }
 
-
 .cell-hit {
-  background-color: lightcoral;
+  background-color: rgb(249, 179, 179);
+  border: 2px solid red;
 }
