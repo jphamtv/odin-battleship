@@ -76,30 +76,57 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
     if (boardCell && boardCell.dataset.id) {
       const shipId = Number(boardCell.dataset.id);
       const ship = opponentBoard.ships.find(ship => ship.id === shipId);
+      console.log(ship)
       shipSunk = ship.isSunk();
     }  
 
-    // Loop to check boundary cells
-    for (let dRow = -1; dRow <= 1; dRow++) {
-      for (let dCol = -1; dCol <= 1; dCol++) {
-        
-        // Skip non-diagonal cells
-        if (!shipSunk && Math.abs(dRow) !== Math.abs(dCol)) continue;
+    if (shipSunk) {
+      const { orientation, position, length } = ship;
 
-        const checkRow = row + dRow;
-        const checkCol = col + dCol;
-        
-        if (!isOutOfBounds(checkRow, checkCol) && opponentBoard.board[checkRow][checkCol] !== 'miss' && opponentBoard.board[checkRow][checkCol] !== 'hit') {
-          const diagonalCellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
-          diagonalCellDiv.classList.add('cell-miss-auto');
-          diagonalCellDiv.textContent = '•';
+      for ( let i = 0; i < length; i++) {
+        const currentRow = orientation === 'vertical' ? position.row + i : position.row;
+        const currentCol = orientation === 'horizontal' ? position.col + i : position.col;
+
+        // Mark surrounding cells for each segment of the ship
+        for (let dRow = -1; dRow <= 1; dRow++) {
+          for (let dCol = -1; dCol <= 1; dCol++) {
+            const checkRow = row + dRow;
+            const checkCol = col + dCol;
+
+            if (!isOutOfBounds(checkRow, checkCol) && opponentBoard.board[checkRow][checkCol] !== 'miss' && opponentBoard.board[checkRow][checkCol] !== 'hit') {
+              const cellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
+              cellDiv.classList.add('cell-miss-auto');
+              cellDiv.textContent = '•';
+            }
+          }  
         }
       }
-    }    
+
+    } else if (!shipSunk) {
+      // Loop to check boundary cells
+      for (let dRow = -1; dRow <= 1; dRow++) {
+        for (let dCol = -1; dCol <= 1; dCol++) {
+          
+          // Skip non-diagonal cells
+          if (Math.abs(dRow) !== Math.abs(dCol)) continue;
+  
+          const checkRow = row + dRow;
+          const checkCol = col + dCol;
+          
+          if (!isOutOfBounds(checkRow, checkCol) && opponentBoard.board[checkRow][checkCol] !== 'miss' && opponentBoard.board[checkRow][checkCol] !== 'hit') {
+            const diagonalCellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
+            diagonalCellDiv.classList.add('cell-miss-auto');
+            diagonalCellDiv.textContent = '•';
+          }
+        }
+      }      
+    }  
   } else if (opponentBoard.board[row][col] === 'miss') {
     boardCell.classList.add('cell-miss');
     boardCell.textContent = '•';
   } 
+
+
 }; 
 
 export const addEventListenersToBoardCells = (currentPlayer, opponentBoard) => {

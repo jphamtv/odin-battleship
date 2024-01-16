@@ -55,11 +55,7 @@ export const createGameBoard = () => {
     return true;
   };
 
-  const ships = [];
-  const shipPositions = {}; // **DELETE THIS IF NOT NECESSARY**
-  const missedShots = [];
-  let allShipsAreSunk = false; // **DELETE THIS - NOT NEEDED**
-
+  
   // Helper function to set a one cell boundary around placed ships
   const setShipBoundary = (row, col) => {
     for (let i = -1; i <= 1; i++) {
@@ -70,6 +66,11 @@ export const createGameBoard = () => {
       }
     }
   };
+
+  const ships = [];
+  const shipPositions = {}; // **DELETE THIS IF NOT NECESSARY**
+  const missedShots = [];
+  let allShipsAreSunk = false; // **DELETE THIS - NOT NEEDED**
 
   // Place the ship on the board with starting coordinate
   const placeShip = (length, [row, col], orientation) => {
@@ -82,6 +83,8 @@ export const createGameBoard = () => {
       const currentCol = orientation === 'horizontal' ? col + i : col;
 
       // Check for boundaries and collisions
+      // *** NEED TO FIX THIS TO IGNORE IF BOUNDARY IS OUT OF BOUNDS.***
+      // if (!isValidPlacement(currentRow, currentCol, length, orientation)) {
       if (!isValidPlacement(row, col, length, orientation)) {
         throw new Error('Invalid ship placement');
       }
