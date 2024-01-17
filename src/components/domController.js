@@ -126,17 +126,20 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
     boardCell.classList.add('cell-miss');
     boardCell.textContent = '•';
   } 
-
-
 }; 
 
 export const addEventListenersToBoardCells = (currentPlayer, opponentBoard) => {
   const computerBoardDiv = document.querySelector('#computer-board-placeholder');
   const cells = computerBoardDiv.querySelectorAll('.board-cell');
   cells.forEach(cell => {
-    cell.addEventListener('click', () => {
+    const cellClickHandler = (event) => {
       handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBoard);
-    });
+      
+      // Remove the event listener from the clicked cell
+      cell.removeEventListener('click', cellClickHandler);   
+    };
+
+    cell.addEventListener('click', cellClickHandler);
   });
 };
 
@@ -144,6 +147,5 @@ const handleCellClick = (row, col, currentPlayer, opponentBoard) => {
   currentPlayer.attack(opponentBoard, [row, col]);
   updateBoardUI(row, col, currentPlayer, opponentBoard);
 
-  onPlayersTurn();
-  
+  onPlayersTurn();  
 };
