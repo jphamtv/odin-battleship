@@ -1,5 +1,6 @@
 // domController.js
 import { onPlayersTurn } from "./gameController.js";
+import { isOutOfBounds } from "./utils.js";
 
 export const renderBoards = (playerBoard, computerBoard, player, computer) => {
   const playerBoardDiv = document.querySelector('#player-board-placeholder');
@@ -10,7 +11,7 @@ export const renderBoards = (playerBoard, computerBoard, player, computer) => {
   computerBoardDiv.appendChild(createBoardElements());  
   renderShipsOnBoard(computerBoardDiv, computerBoard);
 
-  addEventListenersToBoardCells(player, computerBoard);
+  addEventListenersToCells(player, computerBoard);
 };
 
 const createBoardElements = () => {
@@ -35,12 +36,12 @@ const createBoardElements = () => {
 export const renderShipsOnBoard = (boardDiv, playerBoard) => {
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 10; col++) {
-      const boardCell = boardDiv.querySelector(`table tr td[data-row="${row}"][data-col="${col}"]`);
-      if (playerBoard.board[row][col] === null || playerBoard.board[row][col] === 'boundary') {
-        boardCell.classList.add('cell-empty');
-      } else if (typeof playerBoard.board[row][col] === 'number') {
-        boardCell.classList.add('cell-ship');
-        boardCell.dataset.id = playerBoard.board[row][col];
+      if (typeof playerBoard.board[row][col] === 'number') {
+        const cell = boardDiv.querySelector(`table tr td[data-row="${row}"][data-col="${col}"]`);
+        cell.dataset.id = playerBoard.board[row][col];
+        if (boardDiv.id === 'player-board-placeholder') {
+          cell.classList.add('cell-ship');        
+        }
       } 
     }
   }  
@@ -61,10 +62,10 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   const boardCell = document.querySelector(`${boardDivId} table tr td[data-row="${row}"][data-col="${col}"]`);
   
   
-  // Helper function to check for out of bounds
-  const isOutOfBounds = (row, col) => {
-    return row < 0 || row >= 10 || col < 0 || col >= 10; 
-  };
+  // // Helper function to check for out of bounds
+  // const isOutOfBounds = (row, col) => {
+  //   return row < 0 || row >= 10 || col < 0 || col >= 10; 
+  // };
   
 
   // if (hit & not ), if (hit & sunk), else (miss)
@@ -77,7 +78,6 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
     if (boardCell && boardCell.dataset.id) {
       const shipId = Number(boardCell.dataset.id);
       ship = opponentBoard.ships.find(ship => ship.id === shipId);
-      console.log(ship)
       shipSunk = ship.isSunk();
     }  
 
@@ -128,7 +128,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   } 
 }; 
 
-export const addEventListenersToBoardCells = (currentPlayer, opponentBoard) => {
+export const addEventListenersToCells = (currentPlayer, opponentBoard) => {
   const computerBoardDiv = document.querySelector('#computer-board-placeholder');
   const cells = computerBoardDiv.querySelectorAll('.board-cell');
   cells.forEach(cell => {
@@ -147,5 +147,7 @@ const handleCellClick = (row, col, currentPlayer, opponentBoard) => {
   currentPlayer.attack(opponentBoard, [row, col]);
   updateBoardUI(row, col, currentPlayer, opponentBoard);
 
-  onPlayersTurn();  
+  if (opponentBoard.board[row][col] === 'miss' || opponentBoard.allShipsSunk()) {
+    onPlayersTurn();    
+  } 
 };

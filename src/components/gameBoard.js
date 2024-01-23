@@ -1,5 +1,6 @@
 // gameBoard.js
 import { createShip } from "./ship.js";
+import { isValidPlacement, isOutOfBounds } from "./utils.js";
 
 export const createGameBoard = () => {
   
@@ -17,50 +18,50 @@ export const createGameBoard = () => {
   
   const board = initializeBoard();
 
-  // Helper function to check for out of bounds
-  const isOutOfBounds = (row, col) => {
-    return row < 0 || row >= 10 || col < 0 || col >= 10; 
-  };
+  // // Helper function to check for out of bounds
+  // const isOutOfBounds = (row, col) => {
+  //   return row < 0 || row >= 10 || col < 0 || col >= 10; 
+  // };
 
-  // Helper function to check for collision
-  const isCollision = (row, col) => {
-    return board[row][col] !== null;
-  };
+  // // Helper function to check for collision
+  // const isCollision = (row, col) => {
+  //   return board[row][col] !== null;
+  // };
   
-  // Helper function to check for boundary violation
-  const isValidPlacement = (row, col, length, orientation) => {
-    // Calculate the end coordinates of the ship based on its orientation
-    const endRow = orientation === 'vertical' ? row + length - 1 : row;
-    const endCol = orientation === 'horizontal' ? col + length - 1 : col;
+  // // Helper function to check for boundary violation for placing ships
+  // const isValidPlacement = (row, col, length, orientation) => {
+  //   // Calculate the end coordinates of the ship based on its orientation
+  //   const endRow = orientation === 'vertical' ? row + length - 1 : row;
+  //   const endCol = orientation === 'horizontal' ? col + length - 1 : col;
     
-    if (isOutOfBounds(endRow, endCol)) {
-      return false;
-    }
+  //   if (isOutOfBounds(endRow, endCol)) {
+  //     return false;
+  //   }
     
-    // Check each segment of the ship and its immediate surroundings
-    for (let i = 0; i < length; i++ ) {
-      const segmentRow = orientation === 'vertical' ? row + i : row;
-      const segmentCol = orientation === 'horizontal' ? col + i : col;
+  //   // Check each segment of the ship and its immediate surroundings
+  //   for (let i = 0; i < length; i++ ) {
+  //     const segmentRow = orientation === 'vertical' ? row + i : row;
+  //     const segmentCol = orientation === 'horizontal' ? col + i : col;
 
-      // Check the segment and its boundaries
-      for (let dRow = -1; dRow <= 1; dRow++) {
-        for (let dCol = -1; dCol <= 1; dCol++) {
-          const checkRow = segmentRow + dRow;
-          const checkCol = segmentCol + dCol;
+  //     // Check the segment and its boundaries
+  //     for (let dRow = -1; dRow <= 1; dRow++) {
+  //       for (let dCol = -1; dCol <= 1; dCol++) {
+  //         const checkRow = segmentRow + dRow;
+  //         const checkCol = segmentCol + dCol;
 
-          // Skip checking if out of bounds
-          if (isOutOfBounds(checkRow, checkCol)) continue;
+  //         // Skip checking if out of bounds
+  //         if (isOutOfBounds(checkRow, checkCol)) continue;
 
-          // Check for collision at the cell
-          if ((dRow === 0 && dCol === 0) && isCollision(checkRow, checkCol)) {
-            return false;
-          }    
-        }
-      }
-    }
+  //         // Check for collision at the cell
+  //         if ((dRow === 0 && dCol === 0) && isCollision(checkRow, checkCol)) {
+  //           return false;
+  //         }    
+  //       }
+  //     }
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
   
   // Helper function to set a one cell boundary around placed ships
@@ -75,14 +76,12 @@ export const createGameBoard = () => {
   };
 
   const ships = [];
-  const missedShots = [];
+  // const missedShots = [];
 
   // Place the ship on the board with starting coordinate
   const placeShip = (length, [row, col], orientation) => {
     // Check for boundaries and collisions
-    // *** NEED TO FIX THIS TO IGNORE IF BOUNDARY IS OUT OF BOUNDS.***
-    if (!isValidPlacement(row, col, length, orientation)) {
-      console.log(`row: ${row}, col: ${col}, length: ${length}, orientation: ${orientation}, `)
+    if (!isValidPlacement(board, row, col, length, orientation)) {
       throw new Error('Invalid ship placement');
     }
 
@@ -122,7 +121,7 @@ export const createGameBoard = () => {
       return true;
     } else {
       board[row][col] = 'miss';
-      missedShots.push([row, col]);
+      // missedShots.push([row, col]);
       return false;
     }
   };
@@ -135,7 +134,7 @@ export const createGameBoard = () => {
   return { 
     board, 
     ships,
-    missedShots, 
+    // missedShots, 
     placeShip, 
     getShipPosition, 
     receiveAttack, 

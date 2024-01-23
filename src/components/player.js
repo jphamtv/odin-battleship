@@ -1,4 +1,5 @@
 // player.js
+import { generateRandomCoord, generateSetOfCoords } from "./utils.js";
 
 export const createPlayer = (name, isHuman) => {
   // Store coordinates to keep track of possible AI moves
@@ -17,28 +18,4 @@ export const createPlayer = (name, isHuman) => {
   };
 
   return { name, isHuman, possibleMoves, attack };
-};
-
-// Function to generate random attacks for the computer AI
-export const generateRandomCoord = (possibleMoves) => {
-  // Convert the set to an array to pick by index
-  const array = Array.from(possibleMoves)
-
-  const index = Math.floor(Math.random() * array.length);
-  const move = array[index];
-
-  return move;
-};
-
-// Helper function to generate all the possible coords on the board
-export const generateSetOfCoords = () => {
-  const coordinates = new Set();
-
-  for (let row = 0; row < 10; row++) {
-    for (let col = 0; col < 10; col++) {
-      coordinates.add([row, col]);
-    }
-  }  
-
-  return coordinates;
 };
