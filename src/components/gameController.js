@@ -1,7 +1,7 @@
 // gameController.js
 import { createPlayer } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
-import { renderBoards, updateBoardUI } from "./domController.js";
+import { renderBoards, updateBoardUI, setCanClick } from "./domController.js";
 import { generateRandomShipPosition, isValidPlacement } from "./utils.js";
 
 // Initialize a new game
@@ -62,6 +62,8 @@ export const onPlayersTurn = () => {
 
     if (playerBoard.board[move[0]][move[1]] === 'hit') {
       onPlayersTurn();  
+    } else {
+      setCanClick(true);
     }
 
   }, 1000);

@@ -61,13 +61,6 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   
   const boardCell = document.querySelector(`${boardDivId} table tr td[data-row="${row}"][data-col="${col}"]`);
   
-  
-  // // Helper function to check for out of bounds
-  // const isOutOfBounds = (row, col) => {
-  //   return row < 0 || row >= 10 || col < 0 || col >= 10; 
-  // };
-  
-
   // if (hit & not ), if (hit & sunk), else (miss)
   // DO THIS NEXT
   if (opponentBoard.board[row][col] === 'hit') {
@@ -128,17 +121,47 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   } 
 }; 
 
+// export const addEventListenersToCells = (currentPlayer, opponentBoard) => {
+//   const computerBoardDiv = document.querySelector('#computer-board-placeholder');
+//   const cells = computerBoardDiv.querySelectorAll('.board-cell');
+//   cells.forEach(cell => {
+//     const cellClickHandler = (event) => {
+//       handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBoard);
+      
+//       // Remove the event listener from the clicked cell
+//       cell.removeEventListener('click', cellClickHandler);   
+//     };
+
+//     cell.addEventListener('click', cellClickHandler);
+//   });
+// };
+
+let canClick = true;
+
+export const setCanClick = (value) => {
+  canClick = value;
+};
+
+const createCellClickHandler = (currentPlayer, opponentBoard) => {
+  const handler = function (event) {
+    // Ignore clicks if canClick is false
+    if(!canClick) return;
+  
+    const cell = event.target;
+    handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBoard);
+    
+    // Remove the event listener from the clicked cell
+    cell.removeEventListener('click', handler);     
+  };
+  return handler;
+};
+
 export const addEventListenersToCells = (currentPlayer, opponentBoard) => {
   const computerBoardDiv = document.querySelector('#computer-board-placeholder');
   const cells = computerBoardDiv.querySelectorAll('.board-cell');
+  
   cells.forEach(cell => {
-    const cellClickHandler = (event) => {
-      handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBoard);
-      
-      // Remove the event listener from the clicked cell
-      cell.removeEventListener('click', cellClickHandler);   
-    };
-
+    const cellClickHandler = createCellClickHandler(currentPlayer, opponentBoard);
     cell.addEventListener('click', cellClickHandler);
   });
 };
@@ -148,6 +171,7 @@ const handleCellClick = (row, col, currentPlayer, opponentBoard) => {
   updateBoardUI(row, col, currentPlayer, opponentBoard);
 
   if (opponentBoard.board[row][col] === 'miss' || opponentBoard.allShipsSunk()) {
+    canClick = false;
     onPlayersTurn();    
   } 
 };
