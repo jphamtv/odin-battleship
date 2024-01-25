@@ -1,10 +1,17 @@
 /* style.css */
 
+* {
+  /* outline: 1px solid lightcoral; */
+}
+
+html {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
 /* INSTRUCTIONS CONTAINER STYLES */
 
 .instruction-container {
   display: flex;
-  gap: 2rem;
   justify-content: center;
   margin-top: 2rem;
 }
@@ -21,16 +28,44 @@
 
 /* GAME BOARD CONTAINER STYLES */
 
-.game-boards-container {
+.game-container {
   display: flex;
-  gap: 2rem;
+  gap: 4rem;
   justify-content: center;
   margin-top: 2rem;
 }
 
-.board + div {
-  text-align: center;
+.player-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.computer-board-container {
+  position: relative;
+  width: 350px;
+}
+
+#computer-board-placeholder {
+  opacity: 0.15;
+}
+
+#random-btn {
+  width: 8rem;
   margin-top: 1rem;
+}
+
+#start-btn {
+  position: absolute;
+  top: 41%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.board-label {
+  text-align: center;
+  margin-top: 0.5rem;
 }
 
 table {

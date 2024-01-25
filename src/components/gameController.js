@@ -1,30 +1,40 @@
 // gameController.js
 import { createPlayer } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
-import { renderBoards, updateBoardUI, setCanClick } from "./domController.js";
+import { renderBoards, updateBoardUI, setCanClick, setComputerBoardOpacity } from "./domController.js";
 import { generateRandomShipPosition, isValidPlacement } from "./utils.js";
+
+let player;
+let computer;
+let playerBoard;
+let computerBoard;
+
+export const startGame = () => {
+  ({ player, computer, playerBoard, computerBoard } = initializeGame());
+  renderBoards(playerBoard, computerBoard, player, computer);
+};
 
 // Initialize a new game
 export const initializeGame = () => {
-  const player = createPlayer('Player', true);
-  const computer = createPlayer('Computer', false);
-  const playerBoard = createGameBoard();
-  const computerBoard = createGameBoard();
-  placeShipsOnBoard(playerBoard);
+  player = createPlayer('Player', true);
+  computer = createPlayer('Computer', false);
+  playerBoard = createGameBoard();
+  computerBoard = createGameBoard();
   placeShipsOnBoard(computerBoard);
-  
+  placeShipsOnBoard(playerBoard);
 
   return { player, computer, playerBoard, computerBoard };
 };
 
+
 // Place ships on the board
-const placeShipsOnBoard = (board) => {
+export const placeShipsOnBoard = (board) => {
   const SHIPS = {
-    carrier: {length: 5, isPlaced: false},
-    battleship: {length: 4, isPlaced: false},
-    destroyer: {length: 3, isPlaced: false},
-    submarine: {length: 3, isPlaced: false},
-    patrolBoat: {length: 2, isPlaced: false},
+    carrier: { length: 5, isPlaced: false },
+    battleship: { length: 4, isPlaced: false },
+    destroyer: { length: 3, isPlaced: false },
+    submarine: { length: 3, isPlaced: false },
+    patrolBoat: { length: 2, isPlaced: false },
   }
 
   const allShipsPlaced = () => Object.values(SHIPS).every(ship => ship.isPlaced === true);
@@ -36,14 +46,11 @@ const placeShipsOnBoard = (board) => {
       const shipPosition = generateRandomShipPosition(board);
       if (isValidPlacement(board.board, shipPosition.position[0], shipPosition.position[1], ship.length, shipPosition.orientation)) {
         board.placeShip(ship.length, shipPosition.position, shipPosition.orientation);
-        ship.isPlaced = true;    
+        ship.isPlaced = true;
       }
-    }  
+    }
   }
 };
-
-const { player, computer, playerBoard, computerBoard } = initializeGame();
-renderBoards(playerBoard, computerBoard, player, computer);
 
 export const onPlayersTurn = () => {
 
@@ -57,16 +64,17 @@ export const onPlayersTurn = () => {
     updateBoardUI(move[0], move[1], computer, playerBoard);
 
     setTimeout(() => {
-      checkForWinner(computer, playerBoard)  
+      checkForWinner(computer, playerBoard)
     }, 500);
 
     if (playerBoard.board[move[0]][move[1]] === 'hit') {
-      onPlayersTurn();  
+      onPlayersTurn();
     } else {
       setCanClick(true);
+      setComputerBoardOpacity(true);
     }
 
-  }, 1000);
+  }, 500);
 
 };
 
@@ -82,4 +90,4 @@ const announceWinner = (winner) => {
   return alert(`${winner.name} wins!`);
 };
 
-const resetGame = () => {};
+const resetGame = () => { };

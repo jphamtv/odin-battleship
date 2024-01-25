@@ -1,5 +1,5 @@
 // domController.js
-import { onPlayersTurn } from "./gameController.js";
+import { onPlayersTurn, placeShipsOnBoard } from "./gameController.js";
 import { isOutOfBounds } from "./utils.js";
 
 export const renderBoards = (playerBoard, computerBoard, player, computer) => {
@@ -12,6 +12,8 @@ export const renderBoards = (playerBoard, computerBoard, player, computer) => {
   renderShipsOnBoard(computerBoardDiv, computerBoard);
 
   addEventListenersToCells(player, computerBoard);
+  addEventListenerToRandomBtn(playerBoardDiv, playerBoard);
+  addEventListenerToStartBtn();
 };
 
 const createBoardElements = () => {
@@ -62,7 +64,6 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   const boardCell = document.querySelector(`${boardDivId} table tr td[data-row="${row}"][data-col="${col}"]`);
   
   // if (hit & not ), if (hit & sunk), else (miss)
-  // DO THIS NEXT
   if (opponentBoard.board[row][col] === 'hit') {
     boardCell.classList.add('cell-hit');
     let shipSunk = false;
@@ -121,22 +122,22 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   } 
 }; 
 
-// export const addEventListenersToCells = (currentPlayer, opponentBoard) => {
-//   const computerBoardDiv = document.querySelector('#computer-board-placeholder');
-//   const cells = computerBoardDiv.querySelectorAll('.board-cell');
-//   cells.forEach(cell => {
-//     const cellClickHandler = (event) => {
-//       handleCellClick(cell.dataset.row, cell.dataset.col, currentPlayer, opponentBoard);
-      
-//       // Remove the event listener from the clicked cell
-//       cell.removeEventListener('click', cellClickHandler);   
-//     };
-
-//     cell.addEventListener('click', cellClickHandler);
-//   });
-// };
-
 let canClick = true;
+
+export const setComputerBoardOpacity = (canClick) => {
+  const computerBoardUI = document.querySelector('#computer-board-placeholder');
+  const instructionDiv = document.querySelector('.instruction');
+
+  if (canClick) {
+    computerBoardUI.style.opacity = '1';
+    instructionDiv.textContent = `Player's turn`;
+  } else {
+    computerBoardUI.style.opacity = '0.25';
+    instructionDiv.textContent = `Computer's turn`;
+  }
+};
+
+
 
 export const setCanClick = (value) => {
   canClick = value;
@@ -171,7 +172,47 @@ const handleCellClick = (row, col, currentPlayer, opponentBoard) => {
   updateBoardUI(row, col, currentPlayer, opponentBoard);
 
   if (opponentBoard.board[row][col] === 'miss' || opponentBoard.allShipsSunk()) {
-    canClick = false;
+    setCanClick(false);
+    setComputerBoardOpacity(canClick);
     onPlayersTurn();    
   } 
+};
+
+const recreateBoard = () => {
+  const playerBoardDiv = document.querySelector('#player-board-placeholder');
+  
+  while (playerBoardDiv.firstChild) {
+    playerBoardDiv.removeChild(playerBoardDiv.firstChild);
+  }
+
+  playerBoardDiv.appendChild(createBoardElements());
+};
+
+const handleRandomBtnClick = (playerBoardDiv, playerBoard) => {
+  return () => {
+    playerBoard.resetBoard();
+    recreateBoard();
+    placeShipsOnBoard(playerBoard);
+    renderShipsOnBoard(playerBoardDiv, playerBoard);  
+  };
+};
+
+const addEventListenerToRandomBtn = (playerBoardDiv, playerBoard) => {
+  const randomBtn = document.querySelector('#random-btn');
+  randomBtn.addEventListener('click', handleRandomBtnClick(playerBoardDiv, playerBoard));
+};
+
+const addEventListenerToStartBtn = () => {
+  const startBtn = document.querySelector('#start-btn');
+  startBtn.addEventListener('click', handleStartBtnClick);
+};
+
+const handleStartBtnClick = () => {
+  const computerBoardUI = document.querySelector('#computer-board-placeholder');
+  const randomBtn = document.querySelector('#random-btn');
+  const startBtn = document.querySelector('#start-btn');
+
+  computerBoardUI.style.opacity = '1';
+  randomBtn.style.display = 'none';
+  startBtn.style.display = 'none';
 };
