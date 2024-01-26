@@ -229,11 +229,14 @@ const dialog = document.querySelector('#dialog');
 
 export const showWinnerDialog = (name) => {
   const winnerNameDiv = document.querySelector('.winner-name');
-  const instructionDiv = document.querySelector('.instruction');
-
-  dialog.show();
-  instructionDiv.textContent = `Game over`;
   winnerNameDiv.textContent = `${name} wins!`;
+  clearInstructions();
+  dialog.showModal();
+};
+
+const clearInstructions = () => {
+  const instructionDiv = document.querySelector('.instruction');
+  instructionDiv.textContent = ``;
 };
 
 const handleResetBtnClick = () => {
