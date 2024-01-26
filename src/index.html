@@ -9,9 +9,19 @@
   <script type="module" src="./index.js" defer></script>
 </head>
 <body>
+  <!-- DIALOG -->
+  <dialog id="dialog">
+    <div class="dialog-content">
+      <div class="winner-name">Player wins!</div>
+      <button id="close-btn">Play Again</button>
+    </div>
+  </dialog>
+
+  <!-- INSTRUCTIONS -->
   <div class="instruction-container">
     <div class="instruction">Player's turn</div>
   </div>
+
   <!-- GAME BOARDS -->
   <div class="game-container">
     <div class="player-board-container">
@@ -21,9 +31,10 @@
     </div>
     <div class="computer-board-container">
       <div class="board" id="computer-board-placeholder"></div>
-      <button id="start-btn">Start Game</button>
+      <button id="start-btn">Start</button>
       <div class="board-label">Computer's board</div>
     </div>
   </div>
+  <button id="reset-btn">Reset Game</button>
 </body>
 </html>

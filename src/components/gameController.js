@@ -1,7 +1,7 @@
 // gameController.js
 import { createPlayer } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
-import { renderBoards, updateBoardUI, setCanClick, setComputerBoardOpacity } from "./domController.js";
+import { renderBoards, updateBoardUI, setCanClick, setComputerBoardOpacity, showWinnerDialog } from "./domController.js";
 import { generateRandomShipPosition, isValidPlacement } from "./utils.js";
 
 let player;
@@ -83,11 +83,13 @@ export const switchPlayer = (currentPlayer, player, computer) => {
 };
 
 const checkForWinner = (currentPlayer, opponentBoard) => {
-  if (opponentBoard.allShipsSunk() === true) return announceWinner(currentPlayer);
+  if (opponentBoard.allShipsSunk() === true) return announceWinner(currentPlayer.name);
 };
 
-const announceWinner = (winner) => {
-  return alert(`${winner.name} wins!`);
+const announceWinner = (name) => {
+  return showWinnerDialog(name);
 };
 
-const resetGame = () => { };
+export const resetGame = () => { 
+  return window.location.reload();
+};

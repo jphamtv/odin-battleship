@@ -8,6 +8,26 @@ html {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+/* DIALOG */
+dialog {
+  position: absolute;
+  top: 13rem;
+  width: 200px;
+  height: 100px;
+  border-radius: 4px;
+  border: 1px solid black;
+  box-shadow: 0 4px 16px 0 rgb(0, 0, 0, 0.15);
+  z-index: 3;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 2rem;
+}
+
 /* INSTRUCTIONS CONTAINER STYLES */
 
 .instruction-container {
@@ -102,4 +122,13 @@ td {
 .cell-hit {
   background-color: rgb(249, 179, 179);
   border: 2px solid red;
+}
+
+#reset-btn {
+  display: none;
+  margin: 2rem auto;
+}
+
+button {
+  padding: 0.5rem 0.5rem;
 }

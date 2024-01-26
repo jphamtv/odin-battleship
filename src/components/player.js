@@ -17,5 +17,5 @@ export const createPlayer = (name, isHuman) => {
     return { attackResult, move };
   };
 
-  return { name, isHuman, possibleMoves, attack };
+  return { name, isHuman, attack };
 };

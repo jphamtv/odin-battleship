@@ -1,5 +1,5 @@
 // domController.js
-import { onPlayersTurn, placeShipsOnBoard } from "./gameController.js";
+import { onPlayersTurn, placeShipsOnBoard, resetGame } from "./gameController.js";
 import { isOutOfBounds } from "./utils.js";
 
 export const renderBoards = (playerBoard, computerBoard, player, computer) => {
@@ -14,6 +14,11 @@ export const renderBoards = (playerBoard, computerBoard, player, computer) => {
   addEventListenersToCells(player, computerBoard);
   addEventListenerToRandomBtn(playerBoardDiv, playerBoard);
   addEventListenerToStartBtn();
+  addEventListenerToCloseBtn();
+  addEventListenerToResetBtn();
+
+  const instructionDiv = document.querySelector('.instruction');
+  instructionDiv.textContent = `Click start to play`;
 };
 
 const createBoardElements = () => {
@@ -130,13 +135,12 @@ export const setComputerBoardOpacity = (canClick) => {
 
   if (canClick) {
     computerBoardUI.style.opacity = '1';
-    instructionDiv.textContent = `Player's turn`;
+    instructionDiv.textContent = `It's your turn to attack…`;
   } else {
     computerBoardUI.style.opacity = '0.25';
-    instructionDiv.textContent = `Computer's turn`;
+    instructionDiv.textContent = `Computer is attacking…`;
   }
 };
-
 
 
 export const setCanClick = (value) => {
@@ -211,8 +215,43 @@ const handleStartBtnClick = () => {
   const computerBoardUI = document.querySelector('#computer-board-placeholder');
   const randomBtn = document.querySelector('#random-btn');
   const startBtn = document.querySelector('#start-btn');
-
+  const resetBtn = document.querySelector('#reset-btn');
+  const instructionDiv = document.querySelector('.instruction');
+  
   computerBoardUI.style.opacity = '1';
   randomBtn.style.display = 'none';
   startBtn.style.display = 'none';
+  resetBtn.style.display = 'block';
+  instructionDiv.textContent = `You attack first…`;
+};
+
+const dialog = document.querySelector('#dialog');
+
+export const showWinnerDialog = (name) => {
+  const winnerNameDiv = document.querySelector('.winner-name');
+  const instructionDiv = document.querySelector('.instruction');
+
+  dialog.show();
+  instructionDiv.textContent = `Game over`;
+  winnerNameDiv.textContent = `${name} wins!`;
+};
+
+const handleResetBtnClick = () => {
+  resetGame();
+};
+
+const addEventListenerToResetBtn = () => {
+  const resetBtn = document.querySelector('#reset-btn');
+  resetBtn.addEventListener('click', handleResetBtnClick);
+};
+
+
+const addEventListenerToCloseBtn = () => {
+  const closeBtn = document.querySelector('#close-btn');
+  closeBtn.addEventListener('click', handleCloseBtnClick);
+};
+
+const handleCloseBtnClick = () => {
+  dialog.close();
+  resetGame();
 };
