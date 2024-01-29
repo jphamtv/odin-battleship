@@ -70,6 +70,7 @@ export const createGameBoard = () => {
 
     if (cell !== null && cell !== 'boundary') {
       board[row][col] = 'hit'; 
+      console.log(`Hit ${row}, ${col}`)
       ship.hit();
       return true;
     } else {

@@ -97,6 +97,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
               const cellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
               cellDiv.classList.add('cell-miss-auto');
               cellDiv.textContent = '•';
+              opponentBoard.board[checkRow][checkCol] = 'miss';
             }
           }  
         }
@@ -117,6 +118,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
             const diagonalCellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
             diagonalCellDiv.classList.add('cell-miss-auto');
             diagonalCellDiv.textContent = '•';
+            opponentBoard.board[checkRow][checkCol] = 'miss';
           }
         }
       }      

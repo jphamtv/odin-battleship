@@ -1,5 +1,5 @@
 // gameController.js
-import { createPlayer } from "./player.js";
+import { createPlayer, createComputerPlayer } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
 import { renderBoards, updateBoardUI, setCanClick, setComputerBoardOpacity, showWinnerDialog } from "./domController.js";
 import { generateRandomShipPosition, isValidPlacement } from "./utils.js";
@@ -17,7 +17,7 @@ export const startGame = () => {
 // Initialize a new game
 export const initializeGame = () => {
   player = createPlayer('Player', true);
-  computer = createPlayer('Computer', false);
+  computer = createComputerPlayer('Computer', false);
   playerBoard = createGameBoard();
   computerBoard = createGameBoard();
   placeShipsOnBoard(computerBoard);
@@ -53,13 +53,12 @@ export const placeShipsOnBoard = (board) => {
 };
 
 export const onPlayersTurn = () => {
-
   setTimeout(() => {
     checkForWinner(player, computerBoard);
   }, 500);
 
   setTimeout(() => {
-    computer.attack(playerBoard);
+    // computer.attack(playerBoard);
     let move = computer.attack(playerBoard).move;
     updateBoardUI(move[0], move[1], computer, playerBoard);
 
