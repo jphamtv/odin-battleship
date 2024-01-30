@@ -4,21 +4,33 @@ html {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+h1 {
+  text-align: center;
+  font-family: "Black Ops One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 5rem;
+  margin: 1rem;
+  color: #333;
+}
+
 /* INSTRUCTIONS CONTAINER STYLES */
 
 .instruction-container {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .instruction {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 3rem;
+  height: 2.5rem;
   width: 20rem;
-  background-color: rgb(244, 244, 244);
+  background-color: rgb(250, 250, 250);
+  border: 1px solid rgb(241, 241, 241);
+  font-style: italic;
 }
 
 
@@ -28,7 +40,7 @@ html {
   display: flex;
   gap: 4rem;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .player-board-container {
@@ -44,19 +56,6 @@ html {
 
 #computer-board-placeholder {
   opacity: 0.15;
-}
-
-#random-btn {
-  width: 8rem;
-  margin-top: 1rem;
-}
-
-#start-btn {
-  position: absolute;
-  top: 41%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
 }
 
 .board-label {
@@ -81,6 +80,11 @@ td {
   text-align: center;
 }
 
+#computer-board-placeholder .clickable:hover {
+  background-color: rgb(215, 253, 215);
+  cursor: crosshair;
+}
+
 .cell-ship {
   background-color: lightblue;
   border: blue;
@@ -96,17 +100,8 @@ td {
 }
 
 .cell-hit {
-  background-color: rgb(249, 179, 179);
+  background-color: rgb(255, 223, 223);
   border: 2px solid red;
-}
-
-#reset-btn {
-  display: none;
-  margin: 2rem auto;
-}
-
-button {
-  padding: 0.5rem 0.5rem;
 }
 
 /* DIALOG */
@@ -133,3 +128,42 @@ dialog {
   background-color: black;
   opacity: 0.25;
 }
+
+/* BUTTONS */
+button {
+  padding: 0.5rem 0.5rem;
+  font-family: "Black Ops One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  border-radius: 2px;
+  background-color: rgb(241, 241, 241);
+  border: 1px solid lightgrey;
+  color: #333;
+}
+
+button:hover {
+  box-shadow: 0 4px 8px 0 rgb(0, 0, 0, 0.15);
+}
+
+#reset-btn {
+  display: none;
+  margin: 1rem auto;
+  padding: .5rem 1rem;
+}
+
+#random-btn {
+  width: 10rem;
+  margin-top: 1rem;
+}
+
+#start-btn {
+  position: absolute;
+  top: 41%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  border: 1px solid rgb(138, 138, 138);
+  padding: .75rem 1rem;
+  font-size: 1rem;
+}
+

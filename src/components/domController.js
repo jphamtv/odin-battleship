@@ -18,7 +18,7 @@ export const renderBoards = (playerBoard, computerBoard, player, computer) => {
   addEventListenerToResetBtn();
 
   const instructionDiv = document.querySelector('.instruction');
-  instructionDiv.textContent = `Click start to play`;
+  instructionDiv.textContent = `Click Start Game to play`;
 };
 
 const createBoardElements = () => {
@@ -29,7 +29,7 @@ const createBoardElements = () => {
     tr.classList.add('board-row');
     for (let col = 0; col < 10; col++) {
       const td = document.createElement('td');
-      td.classList.add('board-cell');
+      td.classList.add('board-cell', 'clickable');
       td.dataset.row = row;
       td.dataset.col = col;
 
@@ -71,6 +71,8 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   // if (hit & not ), if (hit & sunk), else (miss)
   if (opponentBoard.board[row][col] === 'hit') {
     boardCell.classList.add('cell-hit');
+    boardCell.classList.remove('clickable');
+    boardCell.textContent = '🔥';
     let shipSunk = false;
     let ship = null;
 
@@ -96,6 +98,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
             if (!isOutOfBounds(checkRow, checkCol) && opponentBoard.board[checkRow][checkCol] !== 'miss' && opponentBoard.board[checkRow][checkCol] !== 'hit') {
               const cellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
               cellDiv.classList.add('cell-miss-auto');
+              cellDiv.classList.remove('clickable');
               cellDiv.textContent = '•';
               opponentBoard.board[checkRow][checkCol] = 'miss';
             }
@@ -117,6 +120,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
           if (!isOutOfBounds(checkRow, checkCol) && opponentBoard.board[checkRow][checkCol] !== 'miss' && opponentBoard.board[checkRow][checkCol] !== 'hit') {
             const diagonalCellDiv = document.querySelector(`${boardDivId} table tr td[data-row="${checkRow}"][data-col="${checkCol}"]`);
             diagonalCellDiv.classList.add('cell-miss-auto');
+            diagonalCellDiv.classList.remove('clickable');
             diagonalCellDiv.textContent = '•';
             opponentBoard.board[checkRow][checkCol] = 'miss';
           }
@@ -125,6 +129,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
     }  
   } else if (opponentBoard.board[row][col] === 'miss') {
     boardCell.classList.add('cell-miss');
+    boardCell.classList.remove('clickable');
     boardCell.textContent = '•';
   } 
 }; 
@@ -140,7 +145,7 @@ export const setComputerBoardOpacity = (canClick) => {
     instructionDiv.textContent = `It's your turn to attack…`;
   } else {
     computerBoardUI.style.opacity = '0.25';
-    instructionDiv.textContent = `Computer is attacking…`;
+    instructionDiv.textContent = `Enemy is attacking…`;
   }
 };
 
@@ -224,7 +229,7 @@ const handleStartBtnClick = () => {
   randomBtn.style.display = 'none';
   startBtn.style.display = 'none';
   resetBtn.style.display = 'block';
-  instructionDiv.textContent = `You attack first…`;
+  instructionDiv.textContent = `It's your turn to attack…`;
 };
 
 const dialog = document.querySelector('#dialog');
