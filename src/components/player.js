@@ -27,8 +27,8 @@ export const createComputerPlayer = (name, isHuman) => {
 
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
-        if (opponentGameBoard.board[row][col] !== 'hit' && 
-            opponentGameBoard.board[row][col] !== 'miss') {
+        if (opponentGameBoard.board[row][col] !== 'hit' 
+              && opponentGameBoard.board[row][col] !== 'miss') {
           possibleMoves.add([row, col]);
         }
       }

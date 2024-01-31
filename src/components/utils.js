@@ -92,19 +92,18 @@ export const isValidPlacement = (board, row, col, length, orientation) => {
 };
 
 // Function to choose the computer's next move after a hit
-export const getNextAdjacentTarget = 
-  (
+export const getNextAdjacentTarget = (
   lastHit, 
   possibleMoves, 
   opponentGameBoard
-  ) => {
-  const nextPossibleMoves = 
-    [
-      [lastHit[0] - 1, lastHit[1]],
-      [lastHit[0] + 1, lastHit[1]],
-      [lastHit[0], lastHit[1] - 1],
-      [lastHit[0], lastHit[1] + 1],
-    ];
+) => {
+
+  const nextPossibleMoves = [
+    [lastHit[0] - 1, lastHit[1]],
+    [lastHit[0] + 1, lastHit[1]],
+    [lastHit[0], lastHit[1] - 1],
+    [lastHit[0], lastHit[1] + 1],
+  ];
 
   // Convert the Set to an Array for iterating
   const possibleMovesArray = Array.from(possibleMoves)
@@ -126,7 +125,7 @@ export const getNextAdjacentTarget =
     // Check if chosen move is valid and cell has not already 
     // been targeted, and is within the boundary of the board
     if (opponentGameBoard.board[move[0]][move[1]] !== 'hit' && 
-        opponentGameBoard.board[move[0]][move[1]] !== 'miss') {
+          opponentGameBoard.board[move[0]][move[1]] !== 'miss') {
       return move;
     } else {
       validMoves.splice(index, 1);
