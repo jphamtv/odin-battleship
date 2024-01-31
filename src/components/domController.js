@@ -1,4 +1,3 @@
-// domController.js
 import { isOutOfBounds } from "./utils.js";
 import { 
   onPlayersTurn, 
@@ -53,7 +52,7 @@ export const renderShipsOnBoard = (boardDiv, playerBoard) => {
       if (typeof playerBoard.board[row][col] === 'number') {
         const cell = boardDiv.querySelector(
                       `table tr td[data-row="${row}"][data-col="${col}"]`
-                      );
+                     );
         cell.dataset.id = playerBoard.board[row][col];
         if (boardDiv.id === 'player-board-placeholder') {
           cell.classList.add('cell-ship');        
@@ -68,7 +67,6 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   row = Number(row);
   col = Number(col);
     
-  // Set the board div based on if human or computer made the move
   if (currentPlayer.isHuman === true) {
     boardDivId = '#computer-board-placeholder';
   } else {
@@ -88,6 +86,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
     let shipSunk = false;
     let ship = null;
 
+    // Get the ship via id and check if it's sunk
     if (boardCell && boardCell.dataset.id) {
       const shipId = Number(boardCell.dataset.id);
       ship = opponentBoard.ships.find(ship => ship.id === shipId);

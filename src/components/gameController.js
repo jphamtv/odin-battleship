@@ -1,4 +1,3 @@
-// gameController.js
 import { createPlayer, createComputerPlayer } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
 import { generateRandomShipPosition, isValidPlacement } from "./utils.js";
@@ -92,7 +91,6 @@ export const onPlayersTurn = () => {
       setComputerBoardOpacity(true);
     }
   }, 500);
-
 };
 
 const checkForWinner = (currentPlayer, opponentBoard) => {
