@@ -1,46 +1,47 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Battleship</title>
-  <link rel="stylesheet" href="./styles/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
-  <script type="module" src="./index.js" defer></script>
-</head>
-<body>
-  <header>
-    <h1>BATTLESHIP</h1>
-  </header>
-  <!-- INSTRUCTIONS -->
-  <div class="instruction-container">
-    <div class="instruction">Player's turn</div>
-  </div>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <script type="module" src="./index.js" defer></script>
+  </head>
+  <body>
 
-  <!-- GAME BOARDS -->
-  <div class="game-container">
-    <div class="player-board-container">
-      <div class="board" id="player-board-placeholder"></div>
-      <div class="board-label">Player's board</div>
-      <button id="random-btn">Randomize Ships</button>
+    <header>
+      <h1>BATTLESHIP</h1>
+    </header>
+    
+    <!-- INSTRUCTIONS -->
+    <div class="instruction-container">
+      <div class="instruction">Player's turn</div>
     </div>
-    <div class="computer-board-container">
-      <div class="board" id="computer-board-placeholder"></div>
-      <button id="start-btn">Start Game</button>
-      <div class="board-label">Computer's board</div>
-    </div>
-  </div>
-  <button id="reset-btn">Reset Game</button>
 
-    <!-- DIALOG -->
-    <dialog id="dialog">
-      <div class="dialog-content">
-        <div class="winner-name">Player wins!</div>
-        <button id="close-btn">Play Again</button>
+    <!-- GAME BOARDS -->
+    <div class="game-container">
+      <div class="player-board-container">
+        <div class="board" id="player-board-placeholder"></div>
+        <div class="board-label">Your Battlefield</div>
+        <button id="random-btn">Randomize Ships</button>
       </div>
-    </dialog>
-</body>
+      <div class="computer-board-container">
+        <div class="board" id="computer-board-placeholder"></div>
+        <button id="start-btn">Start Game</button>
+        <div class="board-label">Enemy's Battlefield</div>
+      </div>
+    </div>
+    <button id="reset-btn">Reset Game</button>
+
+      <!-- DIALOG -->
+      <dialog id="dialog">
+        <div class="dialog-content">
+          <div class="winner-name">Player wins!</div>
+          <button id="close-btn">Play Again</button>
+        </div>
+      </dialog>
+  </body>
 </html>

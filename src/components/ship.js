@@ -1,7 +1,6 @@
-// ship.js
-
 let shipIdCounter = 0;
 
+// Factory to create ships
 export const createShip = (length, position, orientation) => {
   const id = shipIdCounter++;
   let hitCount = 0;

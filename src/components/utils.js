@@ -1,6 +1,5 @@
-// utils.js
-
-
+// Function to generate random ship placements at the start
+// of the game and when using Randomize Ships button
 export const generateRandomShipPosition = (board) => {
   const availablePositions = new Set();
 
@@ -23,19 +22,17 @@ const generateRandomOrientation = () => {
   if (num === 1) return 'vertical';
 };
 
-
-// Function to generate random attacks for the computer AI
+// Function to generate random coordinate for the computer's move
 export const generateRandomCoord = (possibleMoves) => {
-  // Convert the set to an array to pick by index
+  // Convert the Set to an Array to choose by index
   const array = Array.from(possibleMoves)
-
   const index = Math.floor(Math.random() * array.length);
   const move = array[index];
 
   return move;
 };
 
-// Helper function to generate all the possible coords on the board
+// Function to generate all the possible coordinates on the board
 export const generateSetOfCoords = () => {
   const coordinates = new Set();
 
@@ -48,20 +45,17 @@ export const generateSetOfCoords = () => {
   return coordinates;
 };
 
-
-// Helper function to check for out of bounds
+// Function to check if coordinate is out of bounds
 export const isOutOfBounds = (row, col) => {
   return row < 0 || row >= 10 || col < 0 || col >= 10; 
 };
 
-
-// Helper function to check for collision
+// Function to check for collision at the cell
 export const isCollision = (board, row, col) => {
   return board[row][col] !== null;
 };
 
-
-// Helper function to check for boundary violation for placing ships
+// Function to check for boundary violation before placing ships
 export const isValidPlacement = (board, row, col, length, orientation) => {
   // Calculate the end coordinates of the ship based on its orientation
   const endRow = orientation === 'vertical' ? row + length - 1 : row;
@@ -76,17 +70,18 @@ export const isValidPlacement = (board, row, col, length, orientation) => {
     const segmentRow = orientation === 'vertical' ? row + i : row;
     const segmentCol = orientation === 'horizontal' ? col + i : col;
     
-    // Check the segment and its boundaries
+    // Check the ship's segment and its boundaries
     for (let dRow = -1; dRow <= 1; dRow++) {
       for (let dCol = -1; dCol <= 1; dCol++) {
         const checkRow = segmentRow + dRow;
         const checkCol = segmentCol + dCol;
         
-        // Skip checking if out of bounds
+        // Skip checking if coordinate is out of bounds
         if (isOutOfBounds(checkRow, checkCol)) continue;
 
         // Check for collision at the cell
-        if ((dRow === 0 && dCol === 0) && isCollision(board, checkRow, checkCol)) {
+        if ((dRow === 0 && dCol === 0) && 
+              isCollision(board, checkRow, checkCol)) {
           return false;
         }    
       }
@@ -94,4 +89,50 @@ export const isValidPlacement = (board, row, col, length, orientation) => {
   }
 
   return true;
+};
+
+// Function to choose the computer's next move after a hit
+export const getNextAdjacentTarget = 
+  (
+  lastHit, 
+  possibleMoves, 
+  opponentGameBoard
+  ) => {
+  const nextPossibleMoves = 
+    [
+      [lastHit[0] - 1, lastHit[1]],
+      [lastHit[0] + 1, lastHit[1]],
+      [lastHit[0], lastHit[1] - 1],
+      [lastHit[0], lastHit[1] + 1],
+    ];
+
+  // Convert the Set to an Array for iterating
+  const possibleMovesArray = Array.from(possibleMoves)
+
+  // Include moves that are possible
+  const validMoves = nextPossibleMoves.filter(move =>
+    !isOutOfBounds(move[0], move[1]) && 
+    possibleMovesArray.some(possibleMove => 
+      possibleMove[0] === move[0] && possibleMove[1] === move[1]
+    )
+  );
+
+  // Keep track until a valid move is found
+  while (validMoves.length > 0) {
+    // Choose a random move from validMoves
+    const index = Math.floor(Math.random() * validMoves.length);
+    const move = validMoves[index];
+  
+    // Check if chosen move is valid and cell has not already 
+    // been targeted, and is within the boundary of the board
+    if (opponentGameBoard.board[move[0]][move[1]] !== 'hit' && 
+        opponentGameBoard.board[move[0]][move[1]] !== 'miss') {
+      return move;
+    } else {
+      validMoves.splice(index, 1);
+    }
+  }
+
+  // Fallback if no valid move is found (should be rare)
+  return generateRandomCoord(possibleMoves);
 };

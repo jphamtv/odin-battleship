@@ -1,8 +1,7 @@
-// player.js
 import { 
   generateRandomCoord, 
   generateSetOfCoords, 
-  isOutOfBounds 
+  getNextAdjacentTarget 
 } from "./utils.js";
 
 // Factory for creating human player
@@ -62,45 +61,4 @@ export const createComputerPlayer = (name, isHuman) => {
   };
 
   return { name, isHuman, attack };
-};
-
-
-// Helper function to choose the next computer move after a hit
-const getNextAdjacentTarget = (lastHit, possibleMoves, opponentGameBoard) => {
-  const nextPossibleMoves = [
-    [lastHit[0] - 1, lastHit[1]],
-    [lastHit[0] + 1, lastHit[1]],
-    [lastHit[0], lastHit[1] - 1],
-    [lastHit[0], lastHit[1] + 1],
-  ];
-
-  // Convert the Set to an Array for looping
-  const possibleMovesArray = Array.from(possibleMoves)
-
-  // Filter out moves that are not in possibleMoves
-  const validMoves = nextPossibleMoves.filter(move =>
-    !isOutOfBounds(move[0], move[1]) && 
-    possibleMovesArray.some(possibleMove => 
-      possibleMove[0] === move[0] && possibleMove[1] === move[1]
-    )
-  );
-
-  // Keep track until a valid move is found
-  while (validMoves.length > 0) {
-    // Choose a random move from validMoves
-    const index = Math.floor(Math.random() * validMoves.length);
-    const move = validMoves[index];
-  
-    // Check if chosen move is valid and cell has not already 
-    // been targeted, and is within the boundary of the board
-    if (opponentGameBoard.board[move[0]][move[1]] !== 'hit' && 
-        opponentGameBoard.board[move[0]][move[1]] !== 'miss') {
-      return move;
-    } else {
-      validMoves.splice(index, 1);
-    }
-  }
-
-  // Fallback if no valid move is found (should be rare)
-  return generateRandomCoord(possibleMoves);
 };
