@@ -21,20 +21,20 @@ export const createComputerPlayer = (name, isHuman) => {
   // Store coordinates to keep track of possible computer moves
   let possibleMoves = generateSetOfCoords();
   let lastHit = null;
-
+  
   const updatePossibleMoves = (opponentGameBoard) => {
     possibleMoves = new Set();
-
+    
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
         if (opponentGameBoard.board[row][col] !== 'hit' 
-              && opponentGameBoard.board[row][col] !== 'miss') {
+        && opponentGameBoard.board[row][col] !== 'miss') {
           possibleMoves.add([row, col]);
         }
       }
     }
   }
-
+  
   const updateAttackState = (attackResult, move) => {
     if (attackResult === true) {
       lastHit = move;
@@ -42,12 +42,12 @@ export const createComputerPlayer = (name, isHuman) => {
       lastHit = null;
     }  
   }; 
-
+  
   const attack = (opponentGameBoard, chosenMove = null) => {
     updatePossibleMoves(opponentGameBoard);
-
+    
     let move = chosenMove;
-   
+    
     if (lastHit) {
       move = getNextAdjacentTarget(lastHit, possibleMoves, opponentGameBoard);
     } else {
@@ -59,6 +59,6 @@ export const createComputerPlayer = (name, isHuman) => {
     updateAttackState(attackResult, move);
     return { attackResult, move };
   };
-
-  return { name, isHuman, attack };
+  
+  return { name, isHuman, possibleMoves, attack };
 };
