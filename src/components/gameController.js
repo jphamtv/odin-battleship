@@ -17,7 +17,7 @@ let computerBoard;
 
 export const startGame = () => {
   ({ player, computer, playerBoard, computerBoard } = initializeGame());
-  renderBoards(playerBoard, computerBoard, player, computer);
+  renderBoards(playerBoard, computerBoard, player);
 };
 
 // Initialize a new game
