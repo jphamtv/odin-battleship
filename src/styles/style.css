@@ -137,6 +137,7 @@ td {
 .cell-hit {
   background-color: rgb(255, 223, 223);
   border: 2px solid red;
+  color: red;
 }
 
 /* DIALOG */

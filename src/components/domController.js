@@ -82,7 +82,7 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
   if (opponentBoard.board[row][col] === 'hit') {
     boardCell.classList.add('cell-hit');
     boardCell.classList.remove('clickable');
-    boardCell.textContent = '🔥';
+    boardCell.textContent = 'X';
     let shipSunk = false;
     let ship = null;
 
@@ -94,14 +94,16 @@ export const updateBoardUI = (row, col, currentPlayer, opponentBoard) => {
     }  
 
     if (shipSunk) {
-      const { orientation, coordinate, length } = ship;
+      const { orientation, position, length } = ship;
 
       for ( let i = 0; i < length; i++) {
         // Calculate the coordinate based on orientation
-        const currentRow = 
-          orientation === 'vertical' ? coordinate.row + i : coordinate.row;
-        const currentCol = 
-          orientation === 'horizontal' ? coordinate.col + i : coordinate.col;
+        const currentRow = orientation === 'vertical' 
+                            ? position.row + i 
+                            : position.row;
+        const currentCol = orientation === 'horizontal' 
+                            ? position.col + i 
+                            : position.col;
 
         // Check the boundary cells surrounding each segment of
         // the ship and mark them so they are removed from play
