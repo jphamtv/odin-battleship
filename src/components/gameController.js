@@ -1,8 +1,14 @@
 // gameController.js
 import { createPlayer, createComputerPlayer } from "./player.js";
 import { createGameBoard } from "./gameBoard.js";
-import { renderBoards, updateBoardUI, setCanClick, setComputerBoardOpacity, showWinnerDialog } from "./domController.js";
 import { generateRandomShipPosition, isValidPlacement } from "./utils.js";
+import { 
+  renderBoards, 
+  updateBoardUI, 
+  setCanClick, 
+  setComputerBoardOpacity, 
+  showWinnerDialog 
+} from "./domController.js";
 
 let player;
 let computer;
@@ -26,8 +32,6 @@ export const initializeGame = () => {
   return { player, computer, playerBoard, computerBoard };
 };
 
-
-// Place ships on the board
 export const placeShipsOnBoard = (board) => {
   const SHIPS = {
     carrier: { length: 5, isPlaced: false },
@@ -37,28 +41,42 @@ export const placeShipsOnBoard = (board) => {
     patrolBoat: { length: 2, isPlaced: false },
   }
 
-  const allShipsPlaced = () => Object.values(SHIPS).every(ship => ship.isPlaced === true);
+  // Checks if all ships are placed on the board
+  const allShipsPlaced = () => 
+    Object.values(SHIPS).every(ship => 
+      ship.isPlaced === true);
 
   while (!allShipsPlaced()) {
-    const shipsToPlace = Object.entries(SHIPS).filter(([name, ship]) => !ship.isPlaced);
+    const shipsToPlace = 
+      Object.entries(SHIPS).filter(([name, ship]) => 
+        !ship.isPlaced);
 
     for (const [name, ship] of shipsToPlace) {
       const shipPosition = generateRandomShipPosition(board);
-      if (isValidPlacement(board.board, shipPosition.position[0], shipPosition.position[1], ship.length, shipPosition.orientation)) {
-        board.placeShip(ship.length, shipPosition.position, shipPosition.orientation);
+      if (isValidPlacement(
+            board.board, 
+            shipPosition.position[0], 
+            shipPosition.position[1], 
+            ship.length, shipPosition.orientation)
+          ) {
+        board.placeShip(
+          ship.length, 
+          shipPosition.position, 
+          shipPosition.orientation
+        );
         ship.isPlaced = true;
       }
     }
   }
 };
 
+// Function executes every time human player makes a move
 export const onPlayersTurn = () => {
   setTimeout(() => {
     checkForWinner(player, computerBoard);
   }, 500);
 
   setTimeout(() => {
-    // computer.attack(playerBoard);
     let move = computer.attack(playerBoard).move;
     updateBoardUI(move[0], move[1], computer, playerBoard);
 
@@ -69,20 +87,18 @@ export const onPlayersTurn = () => {
     if (playerBoard.board[move[0]][move[1]] === 'hit') {
       onPlayersTurn();
     } else {
+      // Allow human player to make the next move
       setCanClick(true);
       setComputerBoardOpacity(true);
     }
-
   }, 500);
 
 };
 
-export const switchPlayer = (currentPlayer, player, computer) => {
-  return currentPlayer === player ? computer : player;
-};
-
 const checkForWinner = (currentPlayer, opponentBoard) => {
-  if (opponentBoard.allShipsSunk() === true) return announceWinner(currentPlayer.name);
+  if (opponentBoard.allShipsSunk() === true) {
+    return announceWinner(currentPlayer.name);
+  }
 };
 
 const announceWinner = (name) => {
